@@ -14,8 +14,10 @@ Visual c++ runtime XX
 ```powershell
 mkdir build
 cd build
-cmake ../
-cmake --build .
+# cmake ../
+# 64 bit is currently not in a working state
+cmake -A Win32 ..
+cmake --build . --config Release
 ```
 
 ## Todo

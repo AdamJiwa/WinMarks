@@ -1,0 +1,12 @@
+#include "resource.h"
+
+IDI_ICON1           ICON    DISCARDABLE     "res\\Icon_32x32.ico"
+
+
+IDC_TRAY_MENU MENU DISCARDABLE
+BEGIN
+    POPUP "POPUP"
+    BEGIN
+        MENUITEM "Exit",            IDM_EXIT
+    END
+END

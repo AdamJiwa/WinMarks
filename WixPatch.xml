@@ -1,0 +1,15 @@
+<CPackWiXPatch>
+    <CPackWiXFragment Id="CM_DP_bin">
+        <Component Id="WINMARKS_AUTOSTART" Guid="268eecc0-d78c-4bc5-9663-466fe11250d0">
+            <RegistryValue Id="WinMarks.rst" Root="HKLM" Action="write"
+                Key="Software\Microsoft\Windows\CurrentVersion\Run"
+                Name="WinMarks"
+                Value="[INSTALLDIR]WinMarks.exe"
+                Type="string" />
+            <Condition>WINMARKSSTARTONLOGIN</Condition>
+        </Component>
+    </CPackWiXFragment>
+    <CPackWiXFragment Id="#PRODUCTFEATURE">
+        <ComponentRef Id="WINMARKS_AUTOSTART" />
+    </CPackWiXFragment>
+</CPackWiXPatch>

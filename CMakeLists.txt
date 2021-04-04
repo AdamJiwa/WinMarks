@@ -1,13 +1,16 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.17.0)
 
-project(winMarks CXX)
+set(VERSION_MAJOR 0)
+set(VERSION_MINOR 1)
+set(VERSION_PATCH 0) 
+project(WinMarks VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH} LANGUAGES CXX)
 
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS")
 configure_file(
     WinMarks.rc.in
     WinMarks.rc
     )
-add_executable(${PROJECT_NAME} WIN32 main.cpp NotifyIcon.cpp resource.h ${CMAKE_CURRENT_BINARY_DIR}/WinMarks.rc)
+add_executable(${PROJECT_NAME} main.cpp NotifyIcon.cpp resource.h ${CMAKE_CURRENT_BINARY_DIR}/WinMarks.rc)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${PROJECT_SOURCE_DIR}
@@ -21,4 +24,31 @@ if(MSVC)
   set(BUILD_SHARED_LIBS TRUE)
   # Trust me, Microsoft docs suck. 
   # target_compile_options(${PROJECT_NAME} PUBLIC "/Fa${CMAKE_CURRENT_SOURCE_DIR}/main" /FA)
+
 endif()
+install(TARGETS ${PROJECT_NAME}
+    RUNTIME
+    COMPONENT application)
+
+set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
+set(CPACK_PACKAGE_VENDOR "github.com/AdamJiwa")
+set(CPACK_PACKAGE_DESCRIPTION "Install ${PROJECT_NAME}")
+set(CPACK_PACKAGE_VERSION_MAJOR "${VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${VERSION_PATCH}")
+set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "${PROJECT_NAME}")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/license.txt")
+set(CPACK_PACKAGE_EXECUTABLES "${PROJECT_NAME};${PROJECT_NAME}")
+
+set(CPACK_WIX_UPGRADE_GUID "03e8b058-0233-4744-9d25-6e03681891d0")
+set(CPACK_WIX_EXTRA_SOURCES "../OptionsDlg.wxs;../InstallDir.wxs")
+set(CPACK_WIX_PATCH_FILE "../WixPatch.xml")
+set(CPACK_WIX_UI_REF "Custom_InstallDir")
+set(CPACK_WIX_PRODUCT_ICON "../res/Icon_32x32.ico")
+set(CPACK_WIX_PROGRAM_MENU_FOLDER ".")
+set(CPACK_WIX_UI_BANNER "../res/Installer_Banner.bmp")
+set(CPACK_WIX_UI_DIALOG "../res/Installer_Dialog.bmp")
+set(CPACK_GENERATOR "WIX")
+
+include(CPack)

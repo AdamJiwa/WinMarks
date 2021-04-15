@@ -196,7 +196,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                              HWND target = windowMap[(int)wParam];
                              // do focus
                              if (NULL != target) {
-                                 ShowWindow(target, 5);
+                                 if (IsIconic(target)) {
+                                     ShowWindow(target, 9);
+                                 } else {
+                                     ShowWindow(target, 5);
+                                 }
                                  SetForegroundWindow(target);
                              } else {
                                  printf("target is null???");

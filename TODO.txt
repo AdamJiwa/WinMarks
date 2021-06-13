@@ -1,0 +1,8 @@
+sometimes when first focusing firefox it snaps it out of position not sure why this would be happening
+
+
+wix warning logs build/_CPack_Packages/win64/WIX/wix.log
+
+There is a wix warning about only removing older versions of itself by version
+
+There is a wix warning about using our own shortcut stuff instead of using CM_SHORTCUT

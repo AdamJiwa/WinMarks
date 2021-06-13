@@ -30,6 +30,7 @@ Patch dialog sequence:
             <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
             <Property Id="WixUI_Mode" Value="InstallDir" />
             <Property Id="WINMARKSSTARTONLOGIN" Value="1" />
+            <Property Id="WINMARKS_STARTONINSTALL" Value="1" />
 
             <DialogRef Id="BrowseDlg" />
             <DialogRef Id="DiskCostDlg" />
@@ -46,6 +47,7 @@ Patch dialog sequence:
             <Publish Dialog="BrowseDlg" Control="OK" Event="DoAction" Value="WixUIValidatePath" Order="3">1</Publish>
             <Publish Dialog="BrowseDlg" Control="OK" Event="SpawnDialog" Value="InvalidDirDlg" Order="4"><![CDATA[NOT WIXUI_DONTVALIDATEPATH AND WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
 
+            <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchAfterInstall">WINMARKS_STARTONINSTALL = 1 and NOT INSTALLED</Publish>
             <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
 
             <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="LicenseAgreementDlg">NOT Installed</Publish>

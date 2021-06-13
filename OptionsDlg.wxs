@@ -19,6 +19,7 @@
                 <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
 
                 <Control Id="StartOnLogin" Type="CheckBox" X="20" Y="60" Width="290" Height="30" Text="Start WinMarks when you log in" Property="WINMARKSSTARTONLOGIN" CheckBoxValue="1" />
+                <Control Id="LaunchAfterInstall" Type="CheckBox" X="20" Y="75" Width="290" Height="30" Text="Start WinMarks After Install" Property="WINMARKS_STARTONINSTALL" CheckBoxValue="1" />
             </Dialog>
         </UI>
     </Fragment>

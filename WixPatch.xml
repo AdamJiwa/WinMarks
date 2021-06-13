@@ -4,10 +4,14 @@
             <RegistryValue Id="WinMarks.rst" Root="HKLM" Action="write"
                 Key="Software\Microsoft\Windows\CurrentVersion\Run"
                 Name="WinMarks"
-                Value="[INSTALLDIR]WinMarks.exe"
+                Value="[INSTALL_ROOT]bin\WinMarks.exe"
                 Type="string" />
             <Condition>WINMARKSSTARTONLOGIN</Condition>
         </Component>
+    </CPackWiXFragment>
+    <CPackWiXFragment Id="#PRODUCT">
+        <Property Id="WixShellExecTarget" Value="[INSTALL_ROOT]bin\WinMarks.exe" />
+        <CustomAction Id="LaunchAfterInstall" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
     </CPackWiXFragment>
     <CPackWiXFragment Id="#PRODUCTFEATURE">
         <ComponentRef Id="WINMARKS_AUTOSTART" />

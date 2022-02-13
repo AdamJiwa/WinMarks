@@ -3,6 +3,7 @@
 #include <string>
 #include <stdexcept>
 #include <iostream>
+#include <format>
 #include "resource.h"
 
 #define WM_ICON_NOTIFY WM_APP+10
@@ -167,6 +168,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                      state = CREATE;
                      deregisterControlHotkeys(hWnd);
                      registerPossibleHotkeyCharacters(hWnd);
+                     ShowInfo(NULL, "enter desired key", true);
                      break;
                  case CONTROL_ACTIVATE_CALLBACK:
                      printf("Entered call state\n");
@@ -208,17 +210,27 @@ void handleCreateAction(HWND hWnd, WPARAM wParam) {
      _tprintf(_T("assign current window to %d\n"), (int)wParam);
 
      HWND caller = GetForegroundWindow();
+    char* pszMem;
      if (NULL != caller) {
          int cTxtLen = GetWindowTextLength(caller);
-         char * pszMem = (PSTR) VirtualAlloc((LPVOID) NULL, (DWORD) (cTxtLen + 1), MEM_COMMIT, PAGE_READWRITE);
+         pszMem = (PSTR) VirtualAlloc((LPVOID) NULL, (DWORD) (cTxtLen + 1), MEM_COMMIT, PAGE_READWRITE);
          GetWindowText(caller, pszMem, cTxtLen + 1);
          _tprintf(_T("Got window title %s of length %d\n"), pszMem, cTxtLen);
+         // ShowInfo(NULL, std::format("Using CallbackId {}", (int)wParam).c_str(), NULL);
          windowMap[(int)wParam] = caller;
      } else {
          _tprintf(_T("got no active window?\n"));
      }
      deregisterPossibleHotkeyCharacters(hWnd);
      registerControlHotkeys(hWnd);
+     UINT keybase = 0x30;
+     int offset = (int)wParam - MAPPING_CALLBACK_OFFSET;
+     // adjust for character range
+     if (offset > 9) {
+         keybase = 0x41;
+         offset -= 9;
+     }
+     ShowInfo(NULL, (LPCTSTR)std::format("Registerd '{}' to {}", pszMem, (char)MapVirtualKeyA( keybase + offset, MAPVK_VK_TO_CHAR)).c_str(), true);
      state = NORMAL;
 }
 
@@ -255,9 +267,9 @@ void popWindow(HWND target) {
              target = lastWindow;
 
          // show the window
-         } else {
-             ShowWindow(target, SW_SHOW);
-         }
+         }// else {
+         //    ShowWindow(target, SW_SHOW);
+         //}
 
          SetForegroundWindow(target);
          lastWindow = currentWindow;
@@ -349,7 +361,7 @@ void registerPossibleHotkeyCharacters(HWND hWnd) {
 
     // Do Character keys
     key = 0x41; // a key
-    int characterKeyOffset = 12;
+    int characterKeyOffset = 9;
 
     for (int i=0; i<27; i++) {
         if(!RegisterHotKey(
@@ -383,7 +395,7 @@ void deregisterPossibleHotkeyCharacters(HWND hWnd) {
 
     // Do Character keys
     key = 0x41; // a key
-    int characterKeyOffset = 12;
+    int characterKeyOffset = 9;
 
     for (int i=0; i<27; i++) {
         if (!UnregisterHotKey(
